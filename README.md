@@ -14,8 +14,27 @@ Replace \<url\> with your url you copied, and replace \<target\> with the folder
 That's it! I recommend making a .bat file with the command so you in the future can export your languages with the press of a button.
 
 # Using the files in GameMaker
-I'll publish my scripts in a bit, need to convert to 2.3. 
+First make sure to grab this script file and add it to your project: [file](https://github.com/AntonBergaker/small_pp_localization_tool/blob/master/Examples/GameMakerExample/scripts/localization/localization.gml)  
+This file contains all the functions you'll need.
 
+## Importing
+To import a language, use the `localization_import(folder, file_name, [default_file_name])` function.  
+The first argument is what folder to look in for your files.  
+The second argument is the name of language, for example "en-US" from the template.  
+The third argument lets you optionally specify a file to use as a default in case a translation is missing for a specific entry. For example you might wish to have English as a fallback language, so you'd put it there.
+
+## Using
+`localize(section, key)`  
+This function will return a string with the entry located in the section given by the first argument, with the key of the second. Even on failure it will return a string with the entry and key it tried to look up.
+
+`localize_format(section, key, identifier, replacement)`  
+This function works the same as localize, but will replace a part of the string with the last argument. For example your string might be: "damage: %dmg", you'd want to use `localize_format(section, key, "%dmg", global.damage)`.
+
+`localize_format_many(section, key, ...)`
+Same as above, but has no limit on how many words you can replace
+
+`localize_count_in_section(section)`  
+Returns how many entries exist in a section. This can be useful for dynamic content. For example you might show random loading screen messages from a long list. If the messages are in their own section you can return a random entry from it if their key is a number, which lets you have a variable amount of messages in different languages. 
 
 # Resulting file layout
 The resulting files are in a buffer format and can be parsed the following way
