@@ -9,7 +9,7 @@ To use the tool, first make a copy of this Google Sheet document: [link](https:/
 
 The tool is run in the command line and expects two values.  
 Usage: `./small_pp_localization_tool.exe <url> <target>`  
-Replace <url> with your url you copied, and replace <target> with the folder where you want your language files to end up.
+Replace \<url\> with your url you copied, and replace \<target\> with the folder where you want your language files to end up.
 
 That's it! I recommend making a .bat file with the command so you in the future can export your languages with the press of a button.
 
