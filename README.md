@@ -15,3 +15,17 @@ That's it! I recommend making a .bat file with the command so you in the future 
 
 # Using the files in GameMaker
 I'll publish my scripts in a bit, need to convert to 2.3. 
+
+
+# Resulting file layout
+The resulting files are in a buffer format and can be parsed the following way
+```
+section_count = buffer.read_int_32() 
+repeat (section_count)
+  section_name = buffer.read_string() // uf8
+  entry_count = buffer.read_int_32()
+  repeat (entry_count)
+    key = buffer.read_string() // utf8
+    entry = buffer.read_string() // utf8
+    // You can consume these values as you wish here
+```
