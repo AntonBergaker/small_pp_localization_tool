@@ -30,7 +30,7 @@ This function will return a string with the entry located in the section given b
 `localize_format(section, key, identifier, replacement)`  
 This function works the same as localize, but will replace a part of the string with the last argument. For example your string might be: "damage: %dmg", you'd want to use `localize_format(section, key, "%dmg", global.damage)`.
 
-`localize_format_many(section, key, ...)`
+`localize_format_many(section, key, ...)`  
 Same as above, but has no limit on how many words you can replace
 
 `localize_count_in_section(section)`  
