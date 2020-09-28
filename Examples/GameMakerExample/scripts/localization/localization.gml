@@ -27,7 +27,7 @@ function localize_count_in_section(section) {
 ///@param replacement
 function localize_format(key, section, identifier, replacement) {
 
-	return string_replace(localize(key, section), identifier, replacement);
+	return string_replace(localize(key, section), identifier, string(replacement));
 }
 
 ///@param key
@@ -37,7 +37,7 @@ function localize_format(key, section, identifier, replacement) {
 function localize_format_many() {
 	var _str = localize(argument[0], argument[1]);
 	for (var i=2; i < argument_count; i+=2) {
-		_str = string_replace(_str, argument[i], argument[i+1])	
+		_str = string_replace(_str, argument[i], string(argument[i+1]))	
 	}
 	return _str;
 }
