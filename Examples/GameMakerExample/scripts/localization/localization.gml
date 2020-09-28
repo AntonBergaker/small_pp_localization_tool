@@ -2,11 +2,13 @@
 ///@param key
 function localize(section, key) {
 	var _val = global.__localization_entries[? section + ";" + key];
-	if _val != undefined {
-		return _val;	
+	
+	// Error if it can't find it
+	if _val == undefined {
+		return "[" + section + "]: " + key;
 	}
 
-	return "[" + section + "]: " + key;
+	return _val;	
 }
 
 ///@description Returns how many entries are in a section
@@ -43,11 +45,11 @@ function localize_format_many() {
 ///@param raw_identifier
 function localize_raw(raw_identifier) {
 	var _val = global.__localization_entries[? raw_identifier];
-	if _val != undefined {
-		return _val;	
+	if _val == undefined {
+		return raw_identifier;	
 	}
 
-	return raw_identifier;
+	return _val;
 }
 
 /// @param folder
