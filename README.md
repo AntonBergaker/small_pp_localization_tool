@@ -8,14 +8,19 @@ The tool relies on creating custom buffer formats thats made to be fast to load 
 To use the tool, first make a copy of this Google Sheet document: [link](https://docs.google.com/spreadsheets/d/1DduV7bqzB3jAvBhMyimEUDVvGc78UI2iymK1-B5dEHA/edit?usp=sharing). You then need to publish the document as a csv file to the web. You can do this by going to: File > Publish to the web > Link. And then selecting .csv in the drop down and then hitting publish. Make a copy of the result url.
 
 The tool is run in the command line and expects two values.  
-Usage: `./small_pp_localization_tool.exe <url> <target>`  
-Replace \<url\> with your url you copied, and replace \<target\> with the folder where you want your language files to end up.
+Usage: `./small_pp_localization_tool.exe -url <url> -target <target_directory> [-type <export_file_type>]`  
+Replace \<url\> with your url you copied, and replace \<target\> with the folder where you want your language files to end up.  
+Optionally you can also specify the export file type, the available options are:
+* **buffer** - *Custom binary buffer layout. The scripts I made are assuming this is what you're using.*
+* **base64** - *Same buffer layout but in base64. Necessary for using the HTML5 export in GameMaker.*
+* **json** - *JSON format. The easiest to use if you're rolling your own scripts.*
 
 That's it! I recommend making a .bat file with the command so you in the future can export your languages with the press of a button.
 
 # Using the files in GameMaker
 First make sure to grab this script file and add it to your project: [file](https://github.com/AntonBergaker/small_pp_localization_tool/blob/master/Examples/GameMakerExample/scripts/localization/localization.gml)  
 This file contains all the functions you'll need.
+These functions are made to be used together with the buffer type of language files.
 
 ## Importing
 To import a language, use the `localization_import(folder, file_name, [default_file_name])` function.  
