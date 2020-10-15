@@ -10,30 +10,46 @@ namespace SmallPPLocalizationTool {
 
             string url = null;
             string target = null;
-            bool base64 = false;
+            ExporterType type = ExporterType.Buffer;
 
             List<string> arguments = new List<string>(args);
             for (int i = 0; i < arguments.Count; i++) {
                 string arg = arguments[i];
-                if (arg == "-u" || arg == "-t") {
+                if (arg == "-url" || arg == "-target" || arg == "-type") {
                     i++;
                     if (i < arguments.Count) {
-                        if (arg == "-u") {
+                        if (arg == "-url") {
                             url = arguments[i];
+                            continue;
                         }
-                        else {
+                        if (arg == "-target")  {
                             target = arguments[i];
+                            continue;
+                        }
+
+                        if (arg == "-type") {
+                            switch (arguments[i]) {
+                                case "json":
+                                    type = ExporterType.Json;
+                                    break;
+                                case "base64":
+                                    type = ExporterType.BufferBase64;
+                                    break;
+                                case "buffer":
+                                    type = ExporterType.Buffer;
+                                    break;
+                                default:
+                                    Console.WriteLine("Unsupported file type. Valid types are \"json\", \"base64\" or \"buffer\".");
+                                    Environment.Exit(13);
+                                    return;
+                            }
                         }
                     }
-                }
-
-                if (arg == "-base64") {
-                    base64 = true;
                 }
             }
 
             if (url == null || target == null) {
-                Console.WriteLine("Usage: LanguageExporter -u <url> -t <target>");
+                Console.WriteLine("Usage: LanguageExporter -url <url> -target <target_directory> [-type <file_type>]");
                 return;
             }
             
@@ -73,7 +89,7 @@ namespace SmallPPLocalizationTool {
             }
 
             try {
-                Exporter exporter = new Exporter(document, base64);
+                Exporter exporter = new Exporter(document, type);
                 int result = exporter.Export(target);
                 Console.WriteLine("Made " + result + " files.");
             }
