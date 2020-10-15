@@ -49,7 +49,7 @@ namespace SmallPPLocalizationTool {
             }
 
             if (url == null || target == null) {
-                Console.WriteLine("Usage: LanguageExporter -url <url> -target <target_directory> [-type <file_type>]");
+                Console.WriteLine("Usage: ./small_pp_localization_tool -url <url> -target <target_directory> [-type <file_type>]");
                 return;
             }
             
