@@ -1,8 +1,7 @@
 {
   "profiles": {
     "LanguageExporter": {
-      "commandName": "Project",
-      "commandLineArgs": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRzNoIMsUmlLBwFaGbXtLLZFVUZFH7CxCdUkPMT5u2HyUI_vQ9sXd5NxPA3sqQWsVQ8g_CStXxtGEta/pub?output=csv wee"
+      "commandName": "Project"
     }
   }
 }

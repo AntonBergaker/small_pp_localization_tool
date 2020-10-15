@@ -1,11 +1,14 @@
 ﻿using System.IO;
+using System.Text;
 
 namespace SmallPPLocalizationTool {
     class Exporter {
         private readonly Document document;
+        private readonly bool useBase64;
 
-        public Exporter(Document document) {
+        public Exporter(Document document, bool useBase64) {
             this.document = document;
+            this.useBase64 = useBase64;
         }
 
         public int Export(string targetDirectory) {
@@ -29,8 +32,8 @@ namespace SmallPPLocalizationTool {
                 }
 
                 filesMade++;
-                string path = Path.Join(targetDirectory, language.ID + ".lang");
-                using FileStream stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                using MemoryStream stream = new MemoryStream();
+
                 using BufferWriter writer = new BufferWriter(stream);
                 
                 stream.SetLength(0);
@@ -49,7 +52,16 @@ namespace SmallPPLocalizationTool {
                         writer.Write(entry.Value);
                     }
                 }
+
+                string path = Path.Join(targetDirectory, language.ID + ".lang");
+                if (useBase64) {
+                    File.WriteAllText(path, System.Convert.ToBase64String(stream.ToArray()));
+                }
+                else {
+                    File.WriteAllBytes(path, stream.ToArray());
+                }
             }
+
 
             return filesMade;
         }

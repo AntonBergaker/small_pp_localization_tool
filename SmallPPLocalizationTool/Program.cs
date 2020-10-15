@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -7,14 +8,35 @@ namespace SmallPPLocalizationTool {
     class Program {
         static async Task Main(string[] args) {
 
-            if (args.Length != 2) {
-                Console.WriteLine("Usage: LanguageExporter <url> <destination>");
-                return;
+            string url = null;
+            string target = null;
+            bool base64 = false;
+
+            List<string> arguments = new List<string>(args);
+            for (int i = 0; i < arguments.Count; i++) {
+                string arg = arguments[i];
+                if (arg == "-u" || arg == "-t") {
+                    i++;
+                    if (i < arguments.Count) {
+                        if (arg == "-u") {
+                            url = arguments[i];
+                        }
+                        else {
+                            target = arguments[i];
+                        }
+                    }
+                }
+
+                if (arg == "-base64") {
+                    base64 = true;
+                }
             }
 
-            string url = args[0];
-            string targetDirectory = args[1];
-
+            if (url == null || target == null) {
+                Console.WriteLine("Usage: LanguageExporter -u <url> -t <target>");
+                return;
+            }
+            
             string data;
             using (var client = new HttpClient()) {
                 try {
@@ -51,8 +73,8 @@ namespace SmallPPLocalizationTool {
             }
 
             try {
-                Exporter exporter = new Exporter(document);
-                int result = exporter.Export(targetDirectory);
+                Exporter exporter = new Exporter(document, base64);
+                int result = exporter.Export(target);
                 Console.WriteLine("Made " + result + " files.");
             }
             catch (Exception) {
