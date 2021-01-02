@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -8,35 +9,40 @@ namespace SmallPPLocalizationTool {
     class Program {
         static async Task Main(string[] args) {
 
-            string url = null;
-            string target = null;
-            ExporterType type = ExporterType.Buffer;
+            string? url = null;
+            string? target = null;
+            string? file = null;
+            IBuilder? builder = null;
 
             List<string> arguments = new List<string>(args);
             for (int i = 0; i < arguments.Count; i++) {
                 string arg = arguments[i];
-                if (arg == "-url" || arg == "-target" || arg == "-type") {
+                if (arg == "-url" || arg == "-target" || arg == "-type" || arg == "-file") {
                     i++;
                     if (i < arguments.Count) {
                         if (arg == "-url") {
                             url = arguments[i];
                             continue;
                         }
+
+                        if (arg == "-file") {
+                            file = arguments[i];
+                            continue;
+                        }
                         if (arg == "-target")  {
                             target = arguments[i];
                             continue;
                         }
-
                         if (arg == "-type") {
                             switch (arguments[i]) {
                                 case "json":
-                                    type = ExporterType.Json;
+                                    builder = new BuilderJson();
                                     break;
                                 case "base64":
-                                    type = ExporterType.BufferBase64;
+                                    builder = new BuilderBuffer(true);
                                     break;
                                 case "buffer":
-                                    type = ExporterType.Buffer;
+                                    builder = new BuilderBuffer(false);
                                     break;
                                 default:
                                     Console.WriteLine("Unsupported file type. Valid types are \"json\", \"base64\" or \"buffer\".");
@@ -48,20 +54,48 @@ namespace SmallPPLocalizationTool {
                 }
             }
 
-            if (url == null || target == null) {
-                Console.WriteLine("Usage: ./small_pp_localization_tool -url <url> -target <target_directory> [-type <file_type>]");
+            
+            if ((file == null && url == null) || target == null) {
+                if (file == null && url == null) {
+                    Console.WriteLine("No file or URL specified.");
+                }
+                else {
+                    Console.WriteLine("No target directory specified.");
+                }
+                Console.WriteLine("File Usage: ./small_pp_localization_tool -file <file_path> -target <target_directory> [-type <file_type>]");
+                Console.WriteLine("URL Usage: ./small_pp_localization_tool -url <url> -target <target_directory> [-type <file_type>]");
                 return;
             }
+
+            builder ??= new BuilderBuffer(false);
             
             string data;
-            using (var client = new HttpClient()) {
+            if (file != null) {
+                try {
+                    data = await File.ReadAllTextAsync(file);
+                }
+                catch (FileNotFoundException) {
+                    Console.WriteLine($"File: {file} was not found. Is the path valid?");
+                    Environment.Exit(13);
+                    return;
+                }
+                catch (Exception) { 
+                    Console.WriteLine("Something went wrong reading the file.");
+                    Console.WriteLine("");
+                    throw;
+                }
+            }
+            else {
+                using var client = new HttpClient();
                 try {
                     data = await client.GetStringAsync(url);
-                } catch (WebException) {
+                }
+                catch (WebException) {
                     Console.WriteLine("Failed to download specified file. Is the url valid?");
                     Environment.Exit(13);
                     return;
-                } catch (Exception) {
+                }
+                catch (Exception) {
                     Console.WriteLine("Something went wrong downloading the file.");
                     Console.WriteLine("");
                     throw;
@@ -89,7 +123,7 @@ namespace SmallPPLocalizationTool {
             }
 
             try {
-                Exporter exporter = new Exporter(document, type);
+                Exporter exporter = new Exporter(document, builder);
                 int result = exporter.Export(target);
                 Console.WriteLine("Made " + result + " files.");
             }

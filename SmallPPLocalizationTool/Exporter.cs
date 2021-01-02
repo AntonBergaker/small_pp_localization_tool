@@ -2,58 +2,55 @@
 using System.Text;
 namespace SmallPPLocalizationTool {
 
-    enum ExporterType {
-        Buffer,
-        BufferBase64,
-        Json
-    }
+
 
     class Exporter {
         private readonly Document document;
-        private readonly ExporterType type;
+        private readonly IBuilder builder;
 
-        public Exporter(Document document, ExporterType type) {
+        public Exporter(Document document, IBuilder builder) {
             this.document = document;
-            this.type = type;
+            this.builder = builder;
         }
 
         public int Export(string targetDirectory) {
-
-            int filesMade = 0;
 
             if (!Directory.Exists(targetDirectory)) {
                 Directory.CreateDirectory(targetDirectory);
             }
 
-            IBuilder builder = type switch {
-                ExporterType.Json => new BuilderJson(),
-                ExporterType.Buffer => new BuilderBuffer(false),
-                ExporterType.BufferBase64 => new BuilderBuffer(true),
-                _ => new BuilderBuffer(false),
-            };
+            int filesMade = 0;
 
             foreach (Language language in document) {
-                if (language.HasSection("meta") == false) {
-                    continue;
+                bool success = ExportLanguage(targetDirectory, language, builder);
+                if (success) {
+                    filesMade++;
                 }
-                if (language["meta"].HasEntry("completed") == false) {
-                    continue;
-                }
-                if (language["meta"]["completed"].Value != "Yes") {
-                    continue;
-                }
-
-                filesMade++;
-
-                string path = Path.Join(targetDirectory, language.ID + ".lang");
-
-                using FileStream stream = new FileStream(path, FileMode.Create);
-
-                builder.WriteToStream(language, stream);
             }
 
 
             return filesMade;
+        }
+
+        private static bool ExportLanguage(string targetDirectory, Language language, IBuilder builder) {
+            if (language.HasSection("meta") == false) {
+                return false;
+            }
+
+            if (language["meta"].HasEntry("completed") == false) {
+                return false;
+            }
+
+            if (language["meta"]["completed"].Value != "Yes") {
+                return false;
+            }
+
+            string path = Path.Join(targetDirectory, language.ID + ".lang");
+
+            using FileStream stream = new FileStream(path, FileMode.Create);
+
+            builder.WriteToStream(language, stream);
+            return true;
         }
     }
 }
