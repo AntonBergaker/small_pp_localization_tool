@@ -19,7 +19,7 @@ That's it! I recommend making a .bat file with the command so you in the future 
 
 # Using the files in GameMaker
 First make sure to grab this script file and add it to your project: [file](https://github.com/AntonBergaker/small_pp_localization_tool/blob/master/Examples/GameMakerExample/scripts/localization/localization.gml)  
-This file contains all the functions you'll need.
+This file contains all the functions you'll need. It has been typed using [GMEdit types](https://github.com/YellowAfterlife/GMEdit/wiki/Smart-completion), giving you really useful static type information.
 These functions are made to be used together with the buffer type of language files.
 
 ## Importing
