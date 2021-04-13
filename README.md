@@ -5,7 +5,9 @@ The actual localization is not done inside the tool, but instead is handled insi
 The tool relies on creating custom buffer formats thats made to be fast to load on phones, and seperates the languages into their own files so nothing unnecessary is loaded.
 
 # Getting started
-To use the tool, first make a copy of this Google Sheet document: [link](https://docs.google.com/spreadsheets/d/1DduV7bqzB3jAvBhMyimEUDVvGc78UI2iymK1-B5dEHA/edit?usp=sharing). You then need to publish the document as a csv file to the web. You can do this by going to: File > Publish to the web > Link. And then selecting .csv in the drop down and then hitting publish. Make a copy of the result url.
+To use the tool, first make a copy of this Google Sheet document:  
+[Reference Google Sheet](https://docs.google.com/spreadsheets/d/1DduV7bqzB3jAvBhMyimEUDVvGc78UI2iymK1-B5dEHA/edit?usp=sharing).  
+You then need to publish the document as a csv file to the web. You can do this by going to: File > Publish to the web > Link. And then selecting .csv in the drop down and then hitting publish. Make a copy of the result url.
 
 The tool is run in the command line and needs two parameters, and can take an optional third one.  
 Usage: `./small_pp_localization_tool.exe -url <url> -target <target_directory> [-type <export_file_type>]`  
