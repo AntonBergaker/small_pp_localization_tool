@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace SmallPPLocalizationTool
 {
-    class BuilderJson : IBuilder
+    public class BuilderJson : IBuilder
     {
         public void WriteToStream(Language language, Stream stream) {
             using Utf8JsonWriter writer = new Utf8JsonWriter(stream, new JsonWriterOptions()

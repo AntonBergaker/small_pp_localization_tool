@@ -2,7 +2,7 @@
 using System.Linq;
 
 namespace SmallPPLocalizationTool {
-    class Language {
+    public class Language {
         public string ID { protected set; get; }
         public Section this[string key] => sections[key];
 

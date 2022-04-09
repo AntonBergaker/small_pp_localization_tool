@@ -1,10 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 namespace SmallPPLocalizationTool {
-
-
-
-    class Exporter {
+    public class Exporter {
         private readonly Document document;
         private readonly IBuilder builder;
 

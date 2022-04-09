@@ -1,16 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using CsvHelper;
 
 namespace SmallPPLocalizationTool {
-    class Document : IEnumerable<Language> {
-        private readonly Language[] languages;
+    public class Document : IEnumerable<Language> {
+        private readonly Dictionary<string, Language> languages;
 
-        private Document(Language[] languages) {
-            this.languages = languages;
+        private Document(IEnumerable<Language> languages) {
+            this.languages = languages.ToDictionary(x => x.ID);
         }
+
+        public bool TryGetLanguage(string languageId, [NotNullWhen(true)] out Language? language) {
+            return languages.TryGetValue(languageId, out language);
+        }
+
+        public int LanguageCount => languages.Count;
 
         public static Document Parse(string csvData) {
 
@@ -19,7 +27,7 @@ namespace SmallPPLocalizationTool {
 
             using StringReader stringReader = new StringReader(csvData);
 
-            using (var csv = new CsvReader(stringReader)) {
+            using (var csv = new CsvReader(stringReader, CultureInfo.InvariantCulture)) {
                 csv.Read();
 
                 int columnCount = 0;
@@ -86,12 +94,12 @@ namespace SmallPPLocalizationTool {
 
 
             }
-
-            return new Document(sections.Select((_, i) => new Language(languageIds[i], sections[i])).ToArray());
+            
+            return new Document(sections.Select((_, i) => new Language(languageIds[i], sections[i])));
         }
 
         public IEnumerator<Language> GetEnumerator() {
-            return (languages as IEnumerable<Language>).GetEnumerator();
+            return languages.Values.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator() {

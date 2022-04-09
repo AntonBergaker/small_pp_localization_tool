@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 
 namespace SmallPPLocalizationTool {
-    interface IBuilder {
+    public interface IBuilder {
         void WriteToStream(Language language, Stream stream);
     }
 }
