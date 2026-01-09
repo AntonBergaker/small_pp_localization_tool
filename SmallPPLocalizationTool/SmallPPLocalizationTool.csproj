@@ -1,18 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
+	<LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
-    <PackageId>small_pp_localization_tool</PackageId>
-    <Company>small_pp_localization_tool</Company>
-    <Product>small_pp_localization_tool</Product>
-    <Authors>small_pp_localization_tool</Authors>
-    <AssemblyName>small_pp_localization_tool</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="27.2.1" />
+    <PackageReference Include="CSVFile" Version="3.2.1" />
   </ItemGroup>
 
 </Project>

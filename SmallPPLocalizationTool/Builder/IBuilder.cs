@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 
-namespace SmallPPLocalizationTool {
-    public interface IBuilder {
-        void WriteToStream(Language language, Stream stream);
-    }
+namespace SmallPPLocalizationTool.Builder; 
+public interface IBuilder {
+    void WriteToStream(Language language, Stream stream);
 }
