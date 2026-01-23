@@ -2,7 +2,7 @@
   "profiles": {
     "SmallPPLocalizationTool.Executable": {
       "commandName": "Project",
-      "commandLineArgs": "-url https://docs.google.com/spreadsheets/d/e/2PACX-1vRlvM-L6yuAIm56g3JbiLO0jkDAJYU8wiZRCdhqdp-BQ6VADk9ZJyvN2_KfsSQgepwXlqjf_SvN3Mo7/pub?gid=1026782966&single=true&output=csv -target \"aba\""
+      "commandLineArgs": "-url https://docs.google.com/spreadsheets/d/e/2PACX-1vRlvM-L6yuAIm56g3JbiLO0jkDAJYU8wiZRCdhqdp-BQ6VADk9ZJyvN2_KfsSQgepwXlqjf_SvN3Mo7/pub?gid=1026782966&single=true&output=csv -target \"aba\" -meta"
     }
   }
 }

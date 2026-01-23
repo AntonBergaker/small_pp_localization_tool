@@ -5,6 +5,7 @@ using System.Net;
 string? url = null;
 string? target = null;
 string? file = null;
+bool includeMeta = false;
 IBuilder? builder = null;
 
 List<string> arguments = new List<string>(args);
@@ -44,6 +45,9 @@ for (int i = 0; i < arguments.Count; i++) {
                 }
             }
         }
+    }
+    if (arg == "-meta") {
+        includeMeta = true;
     }
 }
 
@@ -108,7 +112,7 @@ try {
 
 try {
     Exporter exporter = new Exporter(document, builder);
-     int result = exporter.Export(target);
+    int result = exporter.Export(target, includeMeta);
     Console.WriteLine("Made " + result + " files.");
 } catch (Exception) {
     Console.WriteLine("Failed to export the resulting files.");

@@ -25,6 +25,13 @@ public class Language {
         return sections.ContainsKey(sectionName);
     }
 
+    public bool HasEntry(string sectionName, string entryKey) {
+        if (!HasSection(sectionName)) {
+            return false;
+        }
+        return this[sectionName].HasEntry(entryKey);
+    }
+
     public Section[] GetSections() => sections.Values.ToArray();
     
 

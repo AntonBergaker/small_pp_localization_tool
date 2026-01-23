@@ -1,5 +1,7 @@
 ﻿using SmallPPLocalizationTool.Builder;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 namespace SmallPPLocalizationTool; 
 public class Exporter {
@@ -11,43 +13,39 @@ public class Exporter {
         this.builder = builder;
     }
 
-    public int Export(string targetDirectory) {
+    public int Export(string targetDirectory, bool includeMetaFile = false) {
+        Directory.CreateDirectory(targetDirectory);
 
-        if (!Directory.Exists(targetDirectory)) {
-            Directory.CreateDirectory(targetDirectory);
+        var languagesThatAreReady = document.Where(x => x.HasEntry("meta", "completed") && x["meta"]["completed"].Value == "Yes").ToArray();
+
+        foreach (var language in languagesThatAreReady) {
+            ExportLanguage(targetDirectory, language, builder);
         }
 
-        int filesMade = 0;
-
-        foreach (Language language in document) {
-            bool success = ExportLanguage(targetDirectory, language, builder);
-            if (success) {
-                filesMade++;
-            }
+        if (includeMetaFile) {
+            var meta = CreateMetaLanguage(languagesThatAreReady);
+            ExportLanguage(targetDirectory, meta, builder);
         }
 
-
-        return filesMade;
+        return languagesThatAreReady.Length + (includeMetaFile ? 1 : 0);
     }
 
-    private static bool ExportLanguage(string targetDirectory, Language language, IBuilder builder) {
-        if (language.HasSection("meta") == false) {
-            return false;
-        }
-
-        if (language["meta"].HasEntry("completed") == false) {
-            return false;
-        }
-
-        if (language["meta"]["completed"].Value != "Yes") {
-            return false;
-        }
-
+    private static void ExportLanguage(string targetDirectory, Language language, IBuilder builder) {
         string path = Path.Combine(targetDirectory, language.ID + ".lang");
 
         using FileStream stream = new FileStream(path, FileMode.Create);
 
         builder.WriteToStream(language, stream);
-        return true;
+    }
+
+    private static Language CreateMetaLanguage(Language[] languagesThatAreReady) {
+        List<Language.Section> metaSections = new();
+        foreach (var lang in languagesThatAreReady) {
+            var metaSection = lang["meta"];
+            
+            metaSections.Add(new Language.Section(lang.ID, 0, metaSection.GetEntries()));
+        }
+
+        return new Language("meta", metaSections);
     }
 }
